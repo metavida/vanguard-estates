@@ -64,3 +64,11 @@ graph LR
     26[Break the News] %% end
     27[Keep Quiet] %% end
 ```
+
+## Local development
+
+If you've got most-any version of node installed, you can serve this app locally using the following:
+
+```
+$ npx serve@latest -l 3027
+```
