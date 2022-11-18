@@ -1,0 +1,20 @@
+.row {
+  width: calc(11em * 17);
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  margin: 1em 0;
+}
+#row-1 {
+  gap: 80em;
+}
+#row-2 {
+  gap: 34em;
+}
+#row-3 {
+  gap: 12em;
+}
+.story {
+  border: 1px solid #333;
+  width: 10em;
+}
