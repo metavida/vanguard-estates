@@ -18,3 +18,9 @@
   border: 1px solid #333;
   width: 10em;
 }
+.story.hidden {
+  visibility: hidden;
+}
+.story.focused {
+  border: 3px solid salmon;
+}
