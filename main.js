@@ -43,10 +43,13 @@ const renderStory = ({ story, parentEl }) => {
     storyEl.append(cellTemp.content.cloneNode(true));
 
     storyEl.querySelector("h2").textContent = name;
-    const imgEl = storyEl.querySelector("img")
+    const imgEl = storyEl.querySelector("img");
     imgEl.setAttribute("src", story.image.src);
-    imgEl.setAttribute("alt", story.image.alt)
-    // TODO: add audio player
+    imgEl.setAttribute("alt", story.image.alt);
+
+    const audioEl = storyEl.querySelector(".player iframe");
+    audioEl.setAttribute("data-src", megaphoneUrl(story.audio));
+
     // TODO: add text reader
 
     const childrenEl = storyEl.querySelector(".children");
@@ -65,6 +68,11 @@ const renderStory = ({ story, parentEl }) => {
   parentEl.append(storyEl);
 };
 
+const megaphoneUrl = ({ url }) => {
+  const [_, megaphoneId] = url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/);
+  return `https://playlist.megaphone.fm?e=${megaphoneId}`;
+};
+
 const renderChild = ({ childId, parentEl }) => {
   const childEl = document.createElement("li");
   childEl.setAttribute("value", childId);
@@ -76,6 +84,12 @@ const renderChild = ({ childId, parentEl }) => {
 const focusStory = (storyId) => {
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
+
+  const audioEl = storyEl.querySelector(".player iframe");
+  if(audioEl.getAttribute("src") !== audioEl.dataset.src) {
+    audioEl.setAttribute("src", audioEl.dataset.src);
+  }
+
   storyEl.classList.add("focused");
   // TODO: modify browser history & get history navigation to work
   storyEl.scrollIntoView({
