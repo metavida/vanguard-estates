@@ -9,7 +9,15 @@ if ("content" in document.createElement("template")) {
 }
 
 const render = () => {
+  const header = document.querySelector("header");
   const main = document.querySelector("main");
+
+  const getStartedLink = header.querySelector(".start a");
+  getStartedLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    focusStory(1);
+  });
+  window.scrollTo(0,0);
 
   storyLayers.forEach((stories, index) => {
     renderRow({
@@ -84,6 +92,7 @@ const renderChild = ({ childId, parentEl }) => {
 const focusStory = (storyId) => {
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
+  console.log({focusStory: storyId, storyEl});
 
   const audioEl = storyEl.querySelector(".player iframe");
   if(audioEl.getAttribute("src") !== audioEl.dataset.src) {
@@ -102,5 +111,4 @@ const focusStory = (storyId) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   render();
-  focusStory(1);
 });

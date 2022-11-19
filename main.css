@@ -1,10 +1,41 @@
-html {
+body {
+  margin: 0;
   background: #A496D1;
   background: linear-gradient(0.25turn, #CE96C7, #A496D1);
+  font-family: "Rambla", sans-serif;
 }
 
 html, body, .row {
   width: calc(20em * 17);
+}
+
+header {
+  width: 100vw;
+  box-sizing: border-box;
+}
+header img {
+  width: calc(100% - 2em);
+  padding: 1em 1em 0;
+}
+header div {
+  margin: 0 1em;
+  padding: 1em;
+  background-color: #fff;
+  border-radius: 0 0 1em 1em;
+}
+header p {
+  margin: 0;
+}
+header .start {
+  text-align: center;
+}
+header .start a {
+  padding: 1rem;
+  display: inline-block;
+  background: #333;
+  border-radius: 0.5rem;
+  font-size: 2em;
+  color: #fff;
 }
 
 .row {
@@ -14,13 +45,13 @@ html, body, .row {
   margin: 1em 0;
 }
 #row-1 {
-  gap: 80em;
+  gap: 140em;
 }
 #row-2 {
-  gap: 34em;
+  gap: 54em;
 }
 #row-3 {
-  gap: 12em;
+  gap: 11em;
 }
 
 
