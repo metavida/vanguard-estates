@@ -88,6 +88,7 @@ const focusStory = (storyId) => {
   const audioEl = storyEl.querySelector(".player iframe");
   if(audioEl.getAttribute("src") !== audioEl.dataset.src) {
     audioEl.setAttribute("src", audioEl.dataset.src);
+    audioEl.removeAttribute("srcdoc");
   }
 
   storyEl.classList.add("focused");

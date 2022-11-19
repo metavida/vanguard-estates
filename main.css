@@ -1,5 +1,13 @@
+html {
+  background: #A496D1;
+  background: linear-gradient(0.25turn, #CE96C7, #A496D1);
+}
+
+html, body, .row {
+  width: calc(20em * 17);
+}
+
 .row {
-  width: calc(11em * 17);
   display: flex;
   gap: 1em;
   justify-content: center;
@@ -17,15 +25,33 @@
 
 
 .story {
+  width: 30em;
+  padding: 1em;
   border: 1px solid #333;
-  width: 10em;
+  border-radius: 1em;
+  background: #fff;
 }
 .story.hidden {
   visibility: hidden;
 }
 .story.focused {
-  border: 3px solid salmon;
+  border: 3px solid #333;
+  box-shadow: 0 0 3em 1em #fff;
+}
+.story h2 {
+  margin: 0;
 }
 .story img {
+  display: block;
+  margin: 1em auto;
   width: 100%;
+  max-width: 200px;
+}
+.story .player {
+  width: 100%;
+  height: 200px;
+}
+.story .player iframe {
+  width: 100%;
+  height: 100%;
 }
