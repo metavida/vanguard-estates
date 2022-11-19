@@ -14,6 +14,8 @@
 #row-3 {
   gap: 12em;
 }
+
+
 .story {
   border: 1px solid #333;
   width: 10em;
@@ -23,4 +25,7 @@
 }
 .story.focused {
   border: 3px solid salmon;
+}
+.story img {
+  width: 100%;
 }

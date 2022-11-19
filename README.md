@@ -69,6 +69,6 @@ graph LR
 
 If you've got most-any version of node installed, you can serve this app locally using the following:
 
-```
-$ npx serve@latest -l 3027
+```bash
+npx serve@latest -l 3027
 ```

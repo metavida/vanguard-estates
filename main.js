@@ -12,7 +12,11 @@ const render = () => {
   const main = document.querySelector("main");
 
   storyLayers.forEach((stories, index) => {
-    renderRow({ stories, parentEl: main, index });
+    renderRow({
+      stories: stories.map(({ id }) => allStories[id]),
+      parentEl: main,
+      index,
+    });
   });
 };
 
@@ -31,7 +35,7 @@ const renderStory = ({ story, parentEl }) => {
   const storyEl = document.createElement("div");
   storyEl.classList.add("story");
 
-  if(Object.keys(story).length) {
+  if (story.id) {
     const { id, name, children } = story;
     storyEl.setAttribute("id", `story-${id}`);
 
@@ -39,6 +43,9 @@ const renderStory = ({ story, parentEl }) => {
     storyEl.append(cellTemp.content.cloneNode(true));
 
     storyEl.querySelector("h2").textContent = name;
+    storyEl.querySelector("img").setAttribute("src", story.image);
+    // TODO: add audio player
+    // TODO: add text reader
 
     const childrenEl = storyEl.querySelector(".children");
     if (children.length) {
@@ -68,7 +75,12 @@ const focusStory = (storyId) => {
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
   storyEl.classList.add("focused");
-  storyEl.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+  // TODO: modify browser history & get history navigation to work
+  storyEl.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "center",
+  });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
