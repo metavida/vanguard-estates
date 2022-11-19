@@ -43,7 +43,9 @@ const renderStory = ({ story, parentEl }) => {
     storyEl.append(cellTemp.content.cloneNode(true));
 
     storyEl.querySelector("h2").textContent = name;
-    storyEl.querySelector("img").setAttribute("src", story.image);
+    const imgEl = storyEl.querySelector("img")
+    imgEl.setAttribute("src", story.image.src);
+    imgEl.setAttribute("alt", story.image.alt)
     // TODO: add audio player
     // TODO: add text reader
 
