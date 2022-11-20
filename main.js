@@ -13,7 +13,9 @@ const render = () => {
   const main = document.querySelector("main");
 
   const getStartedLink = header.querySelector(".start a");
-  getStartedLink.addEventListener("click", (event) => focusStory({storyId: 1, event}));
+  getStartedLink.addEventListener("click", (event) =>
+    focusStory({ storyId: 1, event })
+  );
 
   storyLayers.forEach((stories, index) => {
     renderRow({
@@ -73,7 +75,8 @@ const renderStory = ({ story, parentEl }) => {
 };
 
 const megaphoneUrl = ({ url }) => {
-  const [_, megaphoneId] = url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/) || [];
+  const [_, megaphoneId] =
+    url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/) || [];
   return `https://playlist.megaphone.fm?e=${megaphoneId}`;
 };
 
@@ -83,7 +86,9 @@ const renderChild = ({ childId, parentEl }) => {
   const childLink = document.createElement("a");
   childLink.setAttribute("href", `#view-story-${childId}`);
   childLink.textContent = allStories[childId].name;
-  childLink.addEventListener("click", (event) => focusStory({storyId: childId, event}));
+  childLink.addEventListener("click", (event) =>
+    focusStory({ storyId: childId, event })
+  );
 
   childEl.append(childLink);
   parentEl.append(childEl);
@@ -92,36 +97,39 @@ const renderChild = ({ childId, parentEl }) => {
 const initialFocus = () => {
   const [_, storyId] = window.location.hash?.match(/#view-story-(\d+)/) || [];
   if (storyId) {
-    focusStory({storyId});
+    focusStory({ storyId, noHistory: true });
   } else {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 };
 
-const focusStory = ({storyId, event}) => {
+const focusStory = ({ storyId, event, noHistory }) => {
   event?.preventDefault();
 
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
-  console.log({focusStory: storyId, storyEl});
 
   const audioEl = storyEl.querySelector(".player iframe");
-  if(audioEl.getAttribute("src") !== audioEl.dataset.src) {
+  if (audioEl.getAttribute("src") !== audioEl.dataset.src) {
     audioEl.setAttribute("src", audioEl.dataset.src);
     audioEl.removeAttribute("srcdoc");
   }
 
   storyEl.classList.add("focused");
-  window.history.pushState({storyId}, "", `#view-story-${storyId}`)
 
   storyEl.scrollIntoView({
     behavior: "smooth",
     block: "center",
     inline: "center",
   });
+
+  if (!noHistory) {
+    window.history.pushState({ storyId }, "", `#view-story-${storyId}`);
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   render();
   initialFocus();
+  window.addEventListener("popstate", initialFocus);
 });
