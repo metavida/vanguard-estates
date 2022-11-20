@@ -13,11 +13,7 @@ const render = () => {
   const main = document.querySelector("main");
 
   const getStartedLink = header.querySelector(".start a");
-  getStartedLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    focusStory(1);
-  });
-  window.scrollTo(0,0);
+  getStartedLink.addEventListener("click", (event) => focusStory({storyId: 1, event}));
 
   storyLayers.forEach((stories, index) => {
     renderRow({
@@ -77,19 +73,34 @@ const renderStory = ({ story, parentEl }) => {
 };
 
 const megaphoneUrl = ({ url }) => {
-  const [_, megaphoneId] = url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/);
+  const [_, megaphoneId] = url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/) || [];
   return `https://playlist.megaphone.fm?e=${megaphoneId}`;
 };
 
 const renderChild = ({ childId, parentEl }) => {
   const childEl = document.createElement("li");
   childEl.setAttribute("value", childId);
-  childEl.textContent = allStories[childId].name;
-  childEl.addEventListener("click", () => focusStory(childId));
+  const childLink = document.createElement("a");
+  childLink.setAttribute("href", `#view-story-${childId}`);
+  childLink.textContent = allStories[childId].name;
+  childLink.addEventListener("click", (event) => focusStory({storyId: childId, event}));
+
+  childEl.append(childLink);
   parentEl.append(childEl);
 };
 
-const focusStory = (storyId) => {
+const initialFocus = () => {
+  const [_, storyId] = window.location.hash?.match(/#view-story-(\d+)/) || [];
+  if (storyId) {
+    focusStory({storyId});
+  } else {
+    window.scrollTo(0,0);
+  }
+};
+
+const focusStory = ({storyId, event}) => {
+  event?.preventDefault();
+
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
   console.log({focusStory: storyId, storyEl});
@@ -101,7 +112,8 @@ const focusStory = (storyId) => {
   }
 
   storyEl.classList.add("focused");
-  // TODO: modify browser history & get history navigation to work
+  window.history.pushState({storyId}, "", `#view-story-${storyId}`)
+
   storyEl.scrollIntoView({
     behavior: "smooth",
     block: "center",
@@ -111,4 +123,5 @@ const focusStory = (storyId) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   render();
+  initialFocus();
 });

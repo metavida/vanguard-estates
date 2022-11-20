@@ -16,6 +16,7 @@ header {
 }
 header img {
   width: calc(100% - 2em);
+  aspect-ratio: 2;
   padding: 1em 1em 0;
 }
 header div {
@@ -79,6 +80,7 @@ header .start a {
   margin: 1em auto;
   width: 100%;
   max-width: 200px;
+  aspect-ratio: 1;
 }
 .story .player {
   width: 100%;
