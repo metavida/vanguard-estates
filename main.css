@@ -5,8 +5,14 @@ body {
   font-family: "Rambla", sans-serif;
 }
 
+:root {
+  --story-box-width: min(90vw, 30em);
+  --min-story-gap: 15em;
+  --story-width: calc(var(--story-box-width) + (var(--min-story-gap) * 2));
+}
+
 html, body, .row {
-  width: calc(100vw * 17);
+  width: calc((var(--story-width)) * 17);
 }
 
 header {
@@ -40,26 +46,66 @@ header .start a {
   color: #fff;
 }
 
-.row {
+main > div {
   display: flex;
-  gap: 1em;
+  gap: var(--min-story-gap);
   justify-content: center;
   margin: 1em 0;
 }
+main {
+  --row-3-gap: var(--story-width);
+  --row-2-gap: calc(var(--story-box-width) + (var(--row-3-gap) * 2));
+  --row-1-gap: calc(var(--story-box-width) + (var(--row-2-gap) * 2));
+}
 #row-1 {
-  gap: 140em;
+  gap: var(--row-1-gap);
 }
 #row-2 {
-  gap: 54em;
+  gap: var(--row-2-gap);
 }
 #row-3 {
-  gap: 11em;
+  gap: var(--row-3-gap);
+}
+
+.connections {
+  height: 2rem;
+  border: 1px solid black;
+}
+.connector {
+  width: 30rem;
+  height: 1rem;
+  border: 2px solid blue;
+}
+#connections-0 .connector {
+  width: calc(var(--row-1-gap) + var(--story-box-width));
+}
+#connections-1 {
+  gap: calc(var(--row-2-gap) + var(--story-box-width));
+}
+#connections-1 .connector {
+  width: calc(var(--row-2-gap) + var(--story-box-width));
+}
+#connections-2 {
+  gap: calc(var(--row-3-gap) + var(--story-box-width));
+}
+#connections-2 .connector {
+  width: calc(var(--row-3-gap) + var(--story-box-width));
+}
+#connections-3 {
+  gap: var(--story-box-width);
+}
+#connections-3 .connector {
+  /* TODO: Handle lines where we only connect half */
+  width: var(--story-box-width);
+}
+#connections-4 {
+  display: none;
 }
 
 
 .story {
   position: relative;
-  width: min(90vw, 30em);
+  width: var(--story-box-width);
   box-sizing: border-box;
   padding: 1em;
   border: 1px solid #333;

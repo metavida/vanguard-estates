@@ -17,9 +17,15 @@ const render = () => {
     focusStory({ storyId: 1, event })
   );
 
-  storyLayers.forEach((stories, index) => {
+  storyLayers.forEach((basicStories, index) => {
+    const stories = basicStories.map(({ id }) => allStories[id]);
     renderRow({
-      stories: stories.map(({ id }) => allStories[id]),
+      stories,
+      parentEl: main,
+      index,
+    });
+    renderConnectorRow({
+      stories,
       parentEl: main,
       index,
     });
@@ -58,7 +64,7 @@ const renderStory = ({ story, parentEl }) => {
 
     // TODO: add text reader
 
-    const childrenEl = storyEl.querySelector(".children")
+    const childrenEl = storyEl.querySelector(".children");
     const childrenList = childrenEl.querySelector("ol");
     if (children.length) {
       children.forEach((childId) =>
@@ -69,9 +75,18 @@ const renderStory = ({ story, parentEl }) => {
       endEl.textContent = "The End";
       childrenEl.prepend(endEl);
 
-      renderStoryNavLink({ storyId: 1, parentEl: childrenList, className: "restart" });
+      renderStoryNavLink({
+        storyId: 1,
+        parentEl: childrenList,
+        className: "restart",
+      });
     }
-    parent && renderStoryNavLink({ storyId: parent, parentEl: childrenList, className: "back" });
+    parent &&
+      renderStoryNavLink({
+        storyId: parent,
+        parentEl: childrenList,
+        className: "back",
+      });
   } else {
     storyEl.classList.add("hidden");
   }
@@ -102,6 +117,28 @@ const renderStoryNavLink = ({ storyId, parentEl, className }) => {
   storyLink.append(linkText);
   listEl.append(storyLink);
   parentEl.append(listEl);
+};
+
+const renderConnectorRow = ({ stories, parentEl, index }) => {
+  const rowEl = document.createElement("div");
+  rowEl.setAttribute("id", `connections-${index}`);
+  rowEl.classList.add("connections");
+  stories.forEach((story) => {
+    renderStoryLine({ story, parentEl: rowEl });
+  });
+
+  parentEl.append(rowEl);
+};
+
+const renderStoryLine = ({ story, parentEl }) => {
+  const storyEl = document.createElement("div");
+  storyEl.classList.add("connector");
+  if (story.parent) {
+  } else {
+    storyEl.classList.add("hidden");
+  }
+
+  parentEl.append(storyEl);
 };
 
 const initialFocus = () => {
