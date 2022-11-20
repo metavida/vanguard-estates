@@ -93,11 +93,13 @@ const renderStoryNavLink = ({ storyId, parentEl, className }) => {
   }
   const storyLink = document.createElement("a");
   storyLink.setAttribute("href", `#view-story-${storyId}`);
-  storyLink.textContent = allStories[storyId].name;
   storyLink.addEventListener("click", (event) =>
     focusStory({ storyId: storyId, event })
   );
+  const linkText = document.createElement("span");
+  linkText.textContent = allStories[storyId].name;
 
+  storyLink.append(linkText);
   listEl.append(storyLink);
   parentEl.append(listEl);
 };

@@ -106,18 +106,20 @@ header .start a {
   top: 0.25rem;
   right: 0.5rem;
   list-style: none;
-  color: #999;
   font-size: 0.8rem;
 }
-.story .children li.back::before {
+.story .children li.back a {
+  color: #999;
+}
+.story .children li.back a::before {
   content: "back ";
 }
-.story .children li.back a {
+.story .children li.back span {
   display: none;
 }
-.story .children li.back:hover a {
+.story .children li.back:hover span {
   display: inline;
 }
-.story .children li.back:hover::before {
+.story .children li.back:hover a::before {
   content: "back: ";
 }
