@@ -42,7 +42,7 @@ const renderStory = ({ story, parentEl }) => {
   storyEl.classList.add("story");
 
   if (story.id) {
-    const { id, name, children } = story;
+    const { id, name, children, parent } = story;
     storyEl.setAttribute("id", `story-${id}`);
 
     const cellTemp = document.getElementById("cell_template");
@@ -59,10 +59,12 @@ const renderStory = ({ story, parentEl }) => {
     // TODO: add text reader
 
     const childrenEl = storyEl.querySelector(".children");
+    const childrenList = childrenEl.querySelector("ol");
     if (children.length) {
       children.forEach((childId) =>
-        renderChild({ childId, parentEl: childrenEl.querySelector("ol") })
+        renderStoryNavLink({ storyId: childId, parentEl: childrenList })
       );
+      parent && renderStoryNavLink({ storyId: parent, parentEl: childrenList, className: "back" });
     } else {
       childrenEl.classList.add("end");
       childrenEl.textContent = "The End";
@@ -80,18 +82,21 @@ const megaphoneUrl = ({ url }) => {
   return `https://playlist.megaphone.fm?e=${megaphoneId}`;
 };
 
-const renderChild = ({ childId, parentEl }) => {
-  const childEl = document.createElement("li");
-  childEl.setAttribute("value", childId);
-  const childLink = document.createElement("a");
-  childLink.setAttribute("href", `#view-story-${childId}`);
-  childLink.textContent = allStories[childId].name;
-  childLink.addEventListener("click", (event) =>
-    focusStory({ storyId: childId, event })
+const renderStoryNavLink = ({ storyId, parentEl, className }) => {
+  const listEl = document.createElement("li");
+  listEl.setAttribute("value", storyId);
+  if (className) {
+    listEl.classList.add(className);
+  }
+  const storyLink = document.createElement("a");
+  storyLink.setAttribute("href", `#view-story-${storyId}`);
+  storyLink.textContent = allStories[storyId].name;
+  storyLink.addEventListener("click", (event) =>
+    focusStory({ storyId: storyId, event })
   );
 
-  childEl.append(childLink);
-  parentEl.append(childEl);
+  listEl.append(storyLink);
+  parentEl.append(listEl);
 };
 
 const initialFocus = () => {
