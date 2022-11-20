@@ -58,17 +58,20 @@ const renderStory = ({ story, parentEl }) => {
 
     // TODO: add text reader
 
-    const childrenEl = storyEl.querySelector(".children");
+    const childrenEl = storyEl.querySelector(".children")
     const childrenList = childrenEl.querySelector("ol");
     if (children.length) {
       children.forEach((childId) =>
         renderStoryNavLink({ storyId: childId, parentEl: childrenList })
       );
-      parent && renderStoryNavLink({ storyId: parent, parentEl: childrenList, className: "back" });
     } else {
-      childrenEl.classList.add("end");
-      childrenEl.textContent = "The End";
+      const endEl = document.createElement("p");
+      endEl.textContent = "The End";
+      childrenEl.prepend(endEl);
+
+      renderStoryNavLink({ storyId: 1, parentEl: childrenList, className: "restart" });
     }
+    parent && renderStoryNavLink({ storyId: parent, parentEl: childrenList, className: "back" });
   } else {
     storyEl.classList.add("hidden");
   }

@@ -91,6 +91,16 @@ header .start a {
   width: 100%;
   height: 100%;
 }
+
+/* The link back to story-1 from "end" points */
+.story .children li.restart {
+  list-style: none;
+}
+.story .children li.restart::before {
+  content: "Start again? ";
+}
+
+/* The nav link back to the parent story */
 .story .children li.back {
   position: absolute;
   top: 0.25rem;
