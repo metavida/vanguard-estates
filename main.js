@@ -49,7 +49,7 @@ const renderStory = ({ story, parentEl }) => {
     const cellTemp = document.getElementById("cell_template");
     storyEl.append(cellTemp.content.cloneNode(true));
 
-    storyEl.querySelector("h2").textContent = name;
+    storyEl.querySelector("h2").textContent = `${id}. ${name}`;
     const imgEl = storyEl.querySelector("img");
     imgEl.setAttribute("src", story.image.src);
     imgEl.setAttribute("alt", story.image.alt);
@@ -66,9 +66,8 @@ const renderStory = ({ story, parentEl }) => {
         renderStoryNavLink({ storyId: childId, parentEl: childrenList })
       );
     } else {
-      const endEl = document.createElement("p");
+      const endEl = childrenEl.querySelector("p");
       endEl.textContent = "The End";
-      childrenEl.prepend(endEl);
 
       renderStoryNavLink({
         storyId: 1,
