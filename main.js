@@ -24,11 +24,6 @@ const render = () => {
       parentEl: main,
       index,
     });
-    renderConnectorRow({
-      stories,
-      parentEl: main,
-      index,
-    });
   });
 };
 
@@ -117,28 +112,6 @@ const renderStoryNavLink = ({ storyId, parentEl, className }) => {
   storyLink.append(linkText);
   listEl.append(storyLink);
   parentEl.append(listEl);
-};
-
-const renderConnectorRow = ({ stories, parentEl, index }) => {
-  const rowEl = document.createElement("div");
-  rowEl.setAttribute("id", `connections-${index}`);
-  rowEl.classList.add("connections");
-  stories.forEach((story) => {
-    renderStoryLine({ story, parentEl: rowEl });
-  });
-
-  parentEl.append(rowEl);
-};
-
-const renderStoryLine = ({ story, parentEl }) => {
-  const storyEl = document.createElement("div");
-  storyEl.classList.add("connector");
-  if (story.parent) {
-  } else {
-    storyEl.classList.add("hidden");
-  }
-
-  parentEl.append(storyEl);
 };
 
 const initialFocus = () => {
