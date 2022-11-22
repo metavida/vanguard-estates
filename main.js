@@ -56,8 +56,9 @@ const renderStory = ({ story, parentEl }) => {
     imgEl.setAttribute("src", story.image.src);
     imgEl.setAttribute("alt", story.image.alt);
 
-    const audioEl = storyEl.querySelector(".player iframe");
-    audioEl.setAttribute("data-src", megaphoneUrl(story.audio));
+    const audioEl = storyEl.querySelector(".player audio");
+    audioEl.setAttribute("src", story.audio.url);
+    audioEl.addEventListener("play", () => handlePlayStart({ audioEl }));
 
     // TODO: add text reader
 
@@ -86,7 +87,7 @@ const renderStory = ({ story, parentEl }) => {
     } else {
       renderAboutNavLink({
         parentEl: childrenList,
-      })
+      });
     }
   } else {
     storyEl.classList.add("hidden");
@@ -95,10 +96,13 @@ const renderStory = ({ story, parentEl }) => {
   parentEl.append(storyEl);
 };
 
-const megaphoneUrl = ({ url }) => {
-  const [_, megaphoneId] =
-    url.match(/traffic\.megaphone\.fm\/([^\/]+)\.mp3/) || [];
-  return `https://playlist.megaphone.fm?e=${megaphoneId}`;
+const handlePlayStart = ({ audioEl }) => {
+  const prevAudioEl = document.querySelector(".playing");
+  if (prevAudioEl) {
+    prevAudioEl.classList.remove("playing");
+    prevAudioEl.pause();
+  }
+  audioEl.classList.add("playing");
 };
 
 const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
@@ -169,11 +173,8 @@ const focusStory = ({ storyId, event, noHistory }) => {
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
 
-  const audioEl = storyEl.querySelector(".player iframe");
-  if (audioEl.getAttribute("src") !== audioEl.dataset.src) {
-    audioEl.setAttribute("src", audioEl.dataset.src);
-    audioEl.removeAttribute("srcdoc");
-  }
+  const audioEl = storyEl.querySelector(".player audio");
+  event && audioEl.play();
 
   storyEl.classList.add("focused");
   document.querySelector("footer").classList.remove("hidden");

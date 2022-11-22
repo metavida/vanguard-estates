@@ -108,11 +108,9 @@ main {
 }
 .story .player {
   width: 100%;
-  height: 200px;
 }
-.story .player iframe {
+.story .player audio {
   width: 100%;
-  height: 100%;
 }
 
 /* The link back to story-1 from "end" points */
