@@ -66,7 +66,11 @@ const renderStory = ({ story, parentEl }) => {
     const childrenList = childrenEl.querySelector("ol");
     if (children.length) {
       children.forEach((childId) =>
-        renderStoryNavLink({ storyId: childId, parentEl: childrenList })
+        renderStoryNavLink({
+          storyId: childId,
+          parentEl: childrenList,
+          pauseCurrent: true,
+        })
       );
     } else {
       const endEl = childrenEl.querySelector("p");
@@ -76,6 +80,7 @@ const renderStory = ({ story, parentEl }) => {
         storyId: 1,
         parentEl: childrenList,
         className: "restart",
+        pauseCurrent: true,
       });
     }
     if (parent) {
@@ -83,6 +88,8 @@ const renderStory = ({ story, parentEl }) => {
         storyId: parent,
         parentEl: childrenList,
         className: "back",
+        noPlay: true,
+        pauseCurrent: true,
       });
     } else {
       renderAboutNavLink({
@@ -96,12 +103,15 @@ const renderStory = ({ story, parentEl }) => {
   parentEl.append(storyEl);
 };
 
-const handlePlayStart = ({ audioEl }) => {
+const pauseCurrentAudio = () => {
   const prevAudioEl = document.querySelector(".playing");
   if (prevAudioEl) {
     prevAudioEl.classList.remove("playing");
     prevAudioEl.pause();
   }
+};
+const handlePlayStart = ({ audioEl }) => {
+  pauseCurrentAudio();
   audioEl.classList.add("playing");
 };
 
@@ -122,14 +132,21 @@ const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
   listEl.append(storyLink);
   parentEl.append(listEl);
 };
-const renderStoryNavLink = ({ storyId, parentEl, className }) => {
+const renderStoryNavLink = ({
+  storyId,
+  parentEl,
+  className,
+  noPlay,
+  pauseCurrent,
+}) => {
   renderNavLink({
     parentEl,
     number: storyId,
     text: allStories[storyId].name,
     className,
     url: `#view-story-${storyId}`,
-    onClick: (event) => focusStory({ storyId: storyId, event }),
+    onClick: (event) =>
+      focusStory({ storyId: storyId, event, noPlay, pauseCurrent }),
   });
 };
 const renderAboutNavLink = ({ parentEl }) => {
@@ -169,12 +186,18 @@ const scrollAndUpdateHistory = ({ event, targetEl, history }) => {
   }
 };
 
-const focusStory = ({ storyId, event, noHistory }) => {
+const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
   document.querySelector(".focused")?.classList.remove("focused");
+  if (pauseCurrent) {
+    pauseCurrentAudio();
+  }
+
   const storyEl = document.getElementById(`story-${storyId}`);
 
   const audioEl = storyEl.querySelector(".player audio");
-  event && audioEl.play();
+  if (event && !noPlay) {
+    audioEl.play();
+  }
 
   storyEl.classList.add("focused");
   document.querySelector("footer").classList.remove("hidden");
