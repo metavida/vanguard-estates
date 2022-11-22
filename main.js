@@ -77,12 +77,17 @@ const renderStory = ({ story, parentEl }) => {
         className: "restart",
       });
     }
-    parent &&
+    if (parent) {
       renderStoryNavLink({
         storyId: parent,
         parentEl: childrenList,
         className: "back",
       });
+    } else {
+      renderAboutNavLink({
+        parentEl: childrenList,
+      })
+    }
   } else {
     storyEl.classList.add("hidden");
   }
@@ -96,23 +101,42 @@ const megaphoneUrl = ({ url }) => {
   return `https://playlist.megaphone.fm?e=${megaphoneId}`;
 };
 
-const renderStoryNavLink = ({ storyId, parentEl, className }) => {
+const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
   const listEl = document.createElement("li");
-  listEl.setAttribute("value", storyId);
+  listEl.setAttribute("value", number);
   if (className) {
     listEl.classList.add(className);
   }
   const storyLink = document.createElement("a");
-  storyLink.setAttribute("href", `#view-story-${storyId}`);
-  storyLink.addEventListener("click", (event) =>
-    focusStory({ storyId: storyId, event })
-  );
+
+  storyLink.setAttribute("href", url);
+  storyLink.addEventListener("click", onClick);
   const linkText = document.createElement("span");
-  linkText.textContent = allStories[storyId].name;
+  linkText.textContent = text;
 
   storyLink.append(linkText);
   listEl.append(storyLink);
   parentEl.append(listEl);
+};
+const renderStoryNavLink = ({ storyId, parentEl, className }) => {
+  renderNavLink({
+    parentEl,
+    number: storyId,
+    text: allStories[storyId].name,
+    className,
+    url: `#view-story-${storyId}`,
+    onClick: (event) => focusStory({ storyId: storyId, event }),
+  });
+};
+const renderAboutNavLink = ({ parentEl }) => {
+  renderNavLink({
+    parentEl,
+    number: 1,
+    text: "About this site",
+    className: "back",
+    url: "#about",
+    onClick: (event) => focusAbout({ event }),
+  });
 };
 
 const initialFocus = () => {
