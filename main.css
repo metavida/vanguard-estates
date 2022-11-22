@@ -24,6 +24,7 @@ header {
   box-sizing: border-box;
 }
 header img {
+  display: block;
   width: calc(100% - 2em);
   aspect-ratio: 2;
   padding: 1em 1em 0;
@@ -33,9 +34,6 @@ header div {
   padding: 1em;
   background-color: #fff;
   border-radius: 0 0 1em 1em;
-}
-header p {
-  margin: 0;
 }
 header .start {
   text-align: center;
@@ -147,4 +145,16 @@ main {
 }
 .story .children li.back:hover a::before {
   content: "back: ";
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 0.25em 0.5em;
+  border-top-left-radius: 0.5em;
+  background: white;
+}
+footer.hidden {
+  display: none;
 }

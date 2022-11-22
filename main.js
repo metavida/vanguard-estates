@@ -16,6 +16,8 @@ const render = () => {
   getStartedLink.addEventListener("click", (event) =>
     focusStory({ storyId: 1, event })
   );
+  const getAboutLink = document.querySelector("footer a");
+  getAboutLink.addEventListener("click", (event) => focusAbout({ event }));
 
   storyLayers.forEach((basicStories, index) => {
     const stories = basicStories.map(({ id }) => allStories[id]);
@@ -117,14 +119,29 @@ const initialFocus = () => {
   const [_, storyId] = window.location.hash?.match(/#view-story-(\d+)/) || [];
   if (storyId) {
     focusStory({ storyId, noHistory: true });
+  } else if (window.location.hash === "#about") {
+    focusAbout({ noHistory: true });
   } else {
     window.scrollTo(0, 0);
   }
 };
 
-const focusStory = ({ storyId, event, noHistory }) => {
+const scrollAndUpdateHistory = ({ event, targetEl, history }) => {
   event?.preventDefault();
 
+  targetEl.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "center",
+  });
+
+  if (history) {
+    const { state, url } = history;
+    window.history.pushState(state, "", url);
+  }
+};
+
+const focusStory = ({ storyId, event, noHistory }) => {
   document.querySelector(".focused")?.classList.remove("focused");
   const storyEl = document.getElementById(`story-${storyId}`);
 
@@ -135,16 +152,24 @@ const focusStory = ({ storyId, event, noHistory }) => {
   }
 
   storyEl.classList.add("focused");
+  document.querySelector("footer").classList.remove("hidden");
 
-  storyEl.scrollIntoView({
-    behavior: "smooth",
-    block: "center",
-    inline: "center",
+  scrollAndUpdateHistory({
+    event,
+    targetEl: storyEl,
+    history: noHistory
+      ? null
+      : { state: { storyId }, url: `#view-story-${storyId}` },
   });
+};
 
-  if (!noHistory) {
-    window.history.pushState({ storyId }, "", `#view-story-${storyId}`);
-  }
+const focusAbout = ({ event, noHistory }) => {
+  document.querySelector("footer").classList.add("hidden");
+  scrollAndUpdateHistory({
+    event,
+    targetEl: document.getElementById("about"),
+    history: noHistory ? null : { url: "#about" },
+  });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
