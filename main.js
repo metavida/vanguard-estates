@@ -156,7 +156,7 @@ const renderAboutNavLink = ({ parentEl }) => {
     number: 1,
     text: "About this site",
     className: "back",
-    url: "#about",
+    url: "#welcome",
     onClick: (event) => focusAbout({ event }),
   });
 };
@@ -165,12 +165,16 @@ const initialFocus = () => {
   const [_, storyId] = window.location.hash?.match(/#view-story-(\d+)/) || [];
   if (storyId) {
     focusStory({ storyId, noHistory: true });
-  } else if (window.location.hash === "#about") {
+  } else if (window.location.hash === "#welcome") {
     focusAbout({ noHistory: true });
   } else {
     window.scrollTo(0, 0);
   }
 };
+
+const setTitle = (...extraText) => {
+  document.title = [...extraText, "Welcome to Vanguard Estates", "Fash Forward"].join(" | ")
+}
 
 const scrollAndUpdateHistory = ({ event, targetEl, history }) => {
   event?.preventDefault();
@@ -210,15 +214,17 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
       ? null
       : { state: { storyId }, url: `#view-story-${storyId}` },
   });
+  setTitle(allStories[storyId]?.name);
 };
 
 const focusAbout = ({ event, noHistory }) => {
   document.querySelector("footer").classList.add("hidden");
   scrollAndUpdateHistory({
     event,
-    targetEl: document.getElementById("about"),
-    history: noHistory ? null : { url: "#about" },
+    targetEl: document.querySelector("header > img"),
+    history: noHistory ? null : { url: "#welcome" },
   });
+  setTitle();
 };
 
 document.addEventListener("DOMContentLoaded", () => {
