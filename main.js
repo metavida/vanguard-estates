@@ -59,6 +59,7 @@ const renderStory = ({ story, parentEl }) => {
     const audioEl = storyEl.querySelector(".player audio");
     audioEl.setAttribute("src", story.audio.url);
     audioEl.addEventListener("play", () => handlePlayStart({ audioEl }));
+    audioEl.addEventListener("pause", () => pauseCurrentAudio({ audioEl }));
 
     // TODO: add text reader
 
