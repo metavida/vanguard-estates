@@ -58,7 +58,7 @@ const renderStory = ({ story, parentEl }) => {
 
     const audioEl = storyEl.querySelector(".player audio");
     audioEl.setAttribute("src", story.audio.url);
-    audioEl.addEventListener("play", () => handlePlayStart({ audioEl }));
+    audioEl.addEventListener("play", () => handlePlayStart({ audioEl, storyEl, storyId: id }));
     audioEl.addEventListener("pause", () => pauseCurrentAudio({ audioEl }));
 
     // TODO: add text reader
@@ -97,6 +97,8 @@ const renderStory = ({ story, parentEl }) => {
         parentEl: childrenList,
       });
     }
+
+    storyEl.addEventListener("click", (event) => focusStory({ storyId: id, event }))
   } else {
     storyEl.classList.add("hidden");
   }
@@ -111,9 +113,12 @@ const pauseCurrentAudio = () => {
     prevAudioEl.pause();
   }
 };
-const handlePlayStart = ({ audioEl }) => {
+const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   pauseCurrentAudio();
   audioEl.classList.add("playing");
+  if(!storyEl.classList.contains("focused")) {
+    focusStory({ storyId, noPlay: true });
+  }
 };
 
 const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
@@ -193,6 +198,7 @@ const scrollAndUpdateHistory = ({ event, targetEl, history }) => {
 
 const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
   document.querySelector(".focused")?.classList.remove("focused");
+  event && event.stopPropagation();
   if (pauseCurrent) {
     pauseCurrentAudio();
   }
