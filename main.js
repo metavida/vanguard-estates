@@ -33,7 +33,6 @@ const renderVertical = ({ className }) => {
 
   for (let id = 1; id < Object.keys(allStories).length; id++) {
     const story = allStories[id];
-    console.log({ where: "rendering story", id, story });
     renderStory({ story, parentEl: main });
   }
 };
@@ -237,7 +236,7 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
   const storyEl = document.getElementById(`story-${storyId}`);
 
   const audioEl = storyEl.querySelector(".player audio");
-  if (event && !noPlay) {
+  if (event && event.target !== audioEl && !noPlay) {
     audioEl.play();
   }
 
