@@ -152,13 +152,12 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
 const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
   const listEl = document.createElement("li");
   listEl.setAttribute("value", number);
-  if (className) {
-    listEl.classList.add(className);
-  }
-  const storyLink = document.createElement("a");
+  listEl.classList.add(className || "child");
+  listEl.addEventListener("click", onClick);
 
+  const storyLink = document.createElement("a");
   storyLink.setAttribute("href", url);
-  storyLink.addEventListener("click", onClick);
+
   const linkText = document.createElement("span");
   linkText.textContent = text;
 
