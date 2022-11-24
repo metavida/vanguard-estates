@@ -9,15 +9,39 @@ if ("content" in document.createElement("template")) {
 }
 
 const render = () => {
-  const header = document.querySelector("header");
-  const main = document.querySelector("main");
-
-  const getStartedLink = header.querySelector(".start a");
+  const getStartedLink = document.querySelector("header .start a");
   getStartedLink.addEventListener("click", (event) =>
     focusStory({ storyId: 1, event })
   );
   const getAboutLink = document.querySelector("footer a");
   getAboutLink.addEventListener("click", (event) => focusAbout({ event }));
+
+  console.log(window.location.search)
+  if (window.location.search === "?tree") {
+    renderTree();
+  } else if (window.location.search === "?single") {
+    renderVertical({ className: "single" });
+  } else {
+    renderVertical({ className: "vertical" });
+  }
+};
+
+const renderVertical = ({ className }) => {
+  document.querySelector("html").classList.add(className);
+  const main = document.querySelector("main");
+  main.classList.add(className);
+
+  for (let id = 1; id < Object.keys(allStories).length; id++) {
+    const story = allStories[id];
+    console.log({ where: "rendering story", id, story });
+    renderStory({ story, parentEl: main });
+  }
+};
+
+const renderTree = () => {
+  document.querySelector("html").classList.add("tree");
+  const main = document.querySelector("main");
+  main.classList.add("tree");
 
   storyLayers.forEach((basicStories, index) => {
     const stories = basicStories.map(({ id }) => allStories[id]);
@@ -58,7 +82,9 @@ const renderStory = ({ story, parentEl }) => {
 
     const audioEl = storyEl.querySelector(".player audio");
     audioEl.setAttribute("src", story.audio.url);
-    audioEl.addEventListener("play", () => handlePlayStart({ audioEl, storyEl, storyId: id }));
+    audioEl.addEventListener("play", () =>
+      handlePlayStart({ audioEl, storyEl, storyId: id })
+    );
     audioEl.addEventListener("pause", () => pauseCurrentAudio({ audioEl }));
 
     // TODO: add text reader
@@ -98,7 +124,9 @@ const renderStory = ({ story, parentEl }) => {
       });
     }
 
-    storyEl.addEventListener("click", (event) => focusStory({ storyId: id, event }))
+    storyEl.addEventListener("click", (event) =>
+      focusStory({ storyId: id, event })
+    );
   } else {
     storyEl.classList.add("hidden");
   }
@@ -116,7 +144,7 @@ const pauseCurrentAudio = () => {
 const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   pauseCurrentAudio();
   audioEl.classList.add("playing");
-  if(!storyEl.classList.contains("focused")) {
+  if (!storyEl.classList.contains("focused")) {
     focusStory({ storyId, noPlay: true });
   }
 };
@@ -178,8 +206,12 @@ const initialFocus = () => {
 };
 
 const setTitle = (...extraText) => {
-  document.title = [...extraText, "Welcome to Vanguard Estates", "Fash Forward"].join(" | ")
-}
+  document.title = [
+    ...extraText,
+    "Welcome to Vanguard Estates",
+    "Fash Forward",
+  ].join(" | ");
+};
 
 const scrollAndUpdateHistory = ({ event, targetEl, history }) => {
   event?.preventDefault();
@@ -225,6 +257,7 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
 
 const focusAbout = ({ event, noHistory }) => {
   document.querySelector("footer").classList.add("hidden");
+  event && event.stopPropagation();
   scrollAndUpdateHistory({
     event,
     targetEl: document.querySelector("header > img"),

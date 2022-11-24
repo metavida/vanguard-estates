@@ -11,17 +11,19 @@ body {
   --story-width: calc(var(--story-box-width) + (var(--min-story-gap) * 2));
 }
 
-html, body, .row {
+html.tree, html.tree body, .row {
   width: calc((var(--story-box-width) * 16) + (var(--min-story-gap) * 17));
 }
 
 header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100vw;
   max-width: 60em;
   box-sizing: border-box;
+}
+.tree header {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 header img {
   display: block;
@@ -61,11 +63,11 @@ main {
 }
 #row-0 {
   margin-top: 20rem;
-  margin-bottom: -20rem;
+  margin-bottom: -10rem;
 }
 #row-1 {
   gap: var(--row-1-gap);
-  margin-bottom: -10rem;
+  margin-bottom: -5rem;
 }
 #row-2 {
   gap: var(--row-2-gap);
@@ -89,10 +91,18 @@ main {
   border-radius: 1em;
   background: #fff;
 }
+.vertical .story {
+  margin: calc(100vh / 2) auto;
+}
+.single .story {
+  display: none;
+  margin: calc(100vh / 2) auto;
+}
 .story.hidden {
   visibility: hidden;
 }
 .story.focused {
+  display: block;
   border: 3px solid #333;
   box-shadow: 0 0 3em 1em #fff;
 }
