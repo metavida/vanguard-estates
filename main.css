@@ -147,9 +147,19 @@ main {
   width: 0.9em;
   height: 0.9em;
   background: var(--history-bg);
-  background: linear-gradient(#fff, #fff 50%, var(--history-bg) 50%, var(--history-bg));
   border-radius: 1em;
-
+}
+.story .children span.history[data-listened="0"] {
+  visibility: hidden;
+}
+.story .children span.history[data-listened="25"] {
+  background: linear-gradient(#fff, #fff 75%, var(--history-bg) 75%, var(--history-bg));
+}
+.story .children span.history[data-listened="50"] {
+  background: linear-gradient(#fff, #fff 50%, var(--history-bg) 50%, var(--history-bg));
+}
+.story .children span.history[data-listened="75"] {
+  background: linear-gradient(#fff, #fff 25%, var(--history-bg) 25%, var(--history-bg));
 }
 .story .children .history svg {
   width: 1.25em;

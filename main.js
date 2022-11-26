@@ -148,7 +148,26 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   if (!storyEl.classList.contains("focused")) {
     focusStory({ storyId, noPlay: true });
   }
+  markStoryListened({ storyId });
 };
+
+const setNavLinkHistory = ({ storyId, historyEl }) => {
+  const checkImg = historyEl.querySelector("svg");
+  const { numChildren, numListened } = historyForStory({ storyId })
+  const percentListened = numListened / numChildren;
+  console.log({where: "history", storyId, percentListened, numListened, numChildren});
+  if (numListened === 0) {
+    historyEl.setAttribute("data-listened", "0");
+  } else if (percentListened <= 0.25) {
+    historyEl.setAttribute("data-listened", "25");
+  } else if (percentListened <= 0.5) {
+    historyEl.setAttribute("data-listened", "50");
+  } else if (percentListened < 1) {
+    historyEl.setAttribute("data-listened", "75");
+  }
+  checkImg.setAttribute("alt", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
+  historyEl.setAttribute("title", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
+}
 
 const renderNavLink = ({ parentEl, number, text, url, onClick, className, append }) => {
   const listEl = document.createElement("li");
@@ -181,14 +200,9 @@ const renderStoryNavLink = ({
   if(includeHistory) {
     historyEl = document.createElement("span");
     historyEl.classList.add("history");
-
     const checkTemp = document.getElementById("checkmark_template");
     historyEl.append(checkTemp.content.cloneNode(true));
-
-    // const checkEl = document.createElement("img");
-    // checkEl.setAttribute("src", "./checkmark.svg");
-    // historyEl.append(checkEl);
-    // historyEl.innerText = JSON.stringify(historyForStory({ storyId }));
+    setNavLinkHistory({ storyId, historyEl });
   }
   renderNavLink({
     parentEl,
