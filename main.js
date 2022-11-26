@@ -1,4 +1,5 @@
 import { storyLayers, allStories } from "./story.js";
+import { historyForStory, markStoryListened } from "./history.js"
 
 const currentStorySteps = [1, 2];
 
@@ -96,6 +97,7 @@ const renderStory = ({ story, parentEl }) => {
           storyId: childId,
           parentEl: childrenList,
           pauseCurrent: true,
+          includeHistory: true,
         })
       );
     } else {
@@ -148,7 +150,7 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   }
 };
 
-const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
+const renderNavLink = ({ parentEl, number, text, url, onClick, className, append }) => {
   const listEl = document.createElement("li");
   listEl.setAttribute("value", number);
   listEl.classList.add(className || "child");
@@ -162,6 +164,9 @@ const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
 
   storyLink.append(linkText);
   listEl.append(storyLink);
+  if(append) {
+    listEl.append(append);
+  }
   parentEl.append(listEl);
 };
 const renderStoryNavLink = ({
@@ -170,7 +175,21 @@ const renderStoryNavLink = ({
   className,
   noPlay,
   pauseCurrent,
+  includeHistory,
 }) => {
+  let historyEl;
+  if(includeHistory) {
+    historyEl = document.createElement("span");
+    historyEl.classList.add("history");
+
+    const checkTemp = document.getElementById("checkmark_template");
+    historyEl.append(checkTemp.content.cloneNode(true));
+
+    // const checkEl = document.createElement("img");
+    // checkEl.setAttribute("src", "./checkmark.svg");
+    // historyEl.append(checkEl);
+    // historyEl.innerText = JSON.stringify(historyForStory({ storyId }));
+  }
   renderNavLink({
     parentEl,
     number: storyId,
@@ -179,6 +198,7 @@ const renderStoryNavLink = ({
     url: `#view-story-${storyId}`,
     onClick: (event) =>
       focusStory({ storyId: storyId, event, noPlay, pauseCurrent }),
+    append: historyEl,
   });
 };
 const renderAboutNavLink = ({ parentEl }) => {
