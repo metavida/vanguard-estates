@@ -1,6 +1,23 @@
 import { storyLayers, allStories } from "./story.js";
 
-const currentStorySteps = [1, 2];
+let autoPlay;
+const setAutoPlay = (value) => {
+  autoPlay = !!value;
+  window.localStorage.setItem("auto_play", value ? "true" : "");
+};
+
+const initAutoPlay = () => {
+  autoPlay = window.localStorage.getItem("auto_play");
+  const autoPlayEl = document.getElementById("auto_play");
+  if (autoPlay === null || autoPlay) {
+    setAutoPlay(true);
+    autoPlayEl.checked = true;
+  } else {
+    setAutoPlay(false);
+    autoPlayEl.checked = false;
+  }
+  autoPlayEl.addEventListener("change", ({ target }) => setAutoPlay(target.checked));
+}
 
 if ("content" in document.createElement("template")) {
   console.log("A supported browser!");
@@ -236,7 +253,7 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
   const storyEl = document.getElementById(`story-${storyId}`);
 
   const audioEl = storyEl.querySelector(".player audio");
-  if (event && event.target !== audioEl && !noPlay) {
+  if (event && event.target !== audioEl && autoPlay && !noPlay) {
     audioEl.play();
   }
 
@@ -266,6 +283,7 @@ const focusAbout = ({ event, noHistory }) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   render();
+  initAutoPlay();
   initialFocus();
   window.addEventListener("popstate", initialFocus);
 });
