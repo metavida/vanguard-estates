@@ -8,9 +8,14 @@ const initStoryHistory = (story) => {
       numChildren += initStoryHistory(allStories[storyId]);
     })
   }
-  // TODO: get numListened from local storage
+  // TODO: start numListened at zero
   const numListened = Math.round(numChildren * Math.random());
-  Object.assign(allStories[story.id], { numChildren, numListened });
+  const history = (
+    JSON.parse(window.localStorage.getItem(`story-${story.id}`))
+    || { numListened: numListened, isListened: false }
+  );
+  // TODO: collect all parents
+  Object.assign(allStories[story.id], history);
   return numChildren;
 };
 initStoryHistory(allStories[1]);
@@ -21,7 +26,7 @@ initStoryHistory(allStories[1]);
 // Given a storyId
 // returns an object shaped like this:
 // { isListenend: <bool>, numChildren: <int>, numListened: <int> }
-export const historyForStory = ({ storyId }) => {
+const historyForStory = ({ storyId }) => {
   const { numChildren, numListened } = allStories[storyId]
 
   return {
@@ -31,4 +36,23 @@ export const historyForStory = ({ storyId }) => {
   };
 };
 
-export const markStoryListened = ({ storyId }) => {};
+export const setNavLinkHistory = ({ historyEl, storyId }) => {
+  const checkImg = historyEl.querySelector("svg");
+  const { numChildren, numListened } = historyForStory({ storyId })
+  const percentListened = numListened / numChildren;
+  if (numListened === 0) {
+    historyEl.setAttribute("data-listened", "0");
+  } else if (percentListened <= 0.25) {
+    historyEl.setAttribute("data-listened", "25");
+  } else if (percentListened <= 0.5) {
+    historyEl.setAttribute("data-listened", "50");
+  } else if (percentListened < 1) {
+    historyEl.setAttribute("data-listened", "75");
+  }
+  checkImg.setAttribute("alt", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
+  historyEl.setAttribute("title", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
+}
+
+export const markStoryListened = ({ storyId }) => {
+  // TODO: Increment numListened for all parents
+};

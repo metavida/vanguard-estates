@@ -1,5 +1,5 @@
 import { storyLayers, allStories } from "./story.js";
-import { historyForStory, markStoryListened } from "./history.js"
+import { setNavLinkHistory, markStoryListened } from "./history.js"
 
 const currentStorySteps = [1, 2];
 
@@ -150,24 +150,6 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   }
   markStoryListened({ storyId });
 };
-
-const setNavLinkHistory = ({ storyId, historyEl }) => {
-  const checkImg = historyEl.querySelector("svg");
-  const { numChildren, numListened } = historyForStory({ storyId })
-  const percentListened = numListened / numChildren;
-  console.log({where: "history", storyId, percentListened, numListened, numChildren});
-  if (numListened === 0) {
-    historyEl.setAttribute("data-listened", "0");
-  } else if (percentListened <= 0.25) {
-    historyEl.setAttribute("data-listened", "25");
-  } else if (percentListened <= 0.5) {
-    historyEl.setAttribute("data-listened", "50");
-  } else if (percentListened < 1) {
-    historyEl.setAttribute("data-listened", "75");
-  }
-  checkImg.setAttribute("alt", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
-  historyEl.setAttribute("title", `(you've listened to ${numListened} of ${numChildren} stories on this path)`);
-}
 
 const renderNavLink = ({ parentEl, number, text, url, onClick, className, append }) => {
   const listEl = document.createElement("li");
