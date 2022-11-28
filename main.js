@@ -199,6 +199,7 @@ const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
 
   const storyLink = document.createElement("a");
   storyLink.setAttribute("href", url);
+  storyLink.setAttribute("tabindex", "-1");
 
   const linkText = document.createElement("span");
   linkText.textContent = text;
