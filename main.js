@@ -95,7 +95,7 @@ const renderStory = ({ story, parentEl }) => {
 
     storyEl.querySelector("h2").textContent = `${id}. ${name}`;
     const imgEl = storyEl.querySelector("img");
-    imgEl.setAttribute("src", story.image.src);
+    imgEl.setAttribute("src", `https://megaphone.imgix.net/podcasts/${story.image.megaphone}?max-w=300&max-h=300&fit=crop&auto=format,compress`);
     imgEl.setAttribute("alt", story.image.alt);
 
     const audioEl = storyEl.querySelector(".player audio");
