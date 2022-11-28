@@ -16,8 +16,10 @@ const initAutoPlay = () => {
     setAutoPlay(false);
     autoPlayEl.checked = false;
   }
-  autoPlayEl.addEventListener("change", ({ target }) => setAutoPlay(target.checked));
-}
+  autoPlayEl.addEventListener("change", ({ target }) =>
+    setAutoPlay(target.checked)
+  );
+};
 
 if ("content" in document.createElement("template")) {
   console.log("A supported browser!");
@@ -33,7 +35,6 @@ const render = () => {
   const getAboutLink = document.querySelector("footer a");
   getAboutLink.addEventListener("click", (event) => focusAbout({ event }));
 
-  console.log(window.location.search)
   if (window.location.search === "?tree") {
     renderTree();
   } else if (window.location.search === "?single") {
@@ -83,6 +84,7 @@ const renderRow = ({ stories, parentEl, index }) => {
 const renderStory = ({ story, parentEl }) => {
   const storyEl = document.createElement("div");
   storyEl.classList.add("story");
+  storyEl.setAttribute("tabindex", "-1");
 
   if (story.id) {
     const { id, name, children, parent } = story;
@@ -143,6 +145,15 @@ const renderStory = ({ story, parentEl }) => {
     storyEl.addEventListener("click", (event) =>
       focusStory({ storyId: id, event })
     );
+    storyEl.addEventListener("keydown", (event) => {
+      const { target, code } = event;
+      if (target === storyEl) {
+        if (code === "Enter" || code === "Space") {
+          event.preventDefault();
+          togglePlayPause({ audioEl });
+        }
+      }
+    });
   } else {
     storyEl.classList.add("hidden");
   }
@@ -150,6 +161,13 @@ const renderStory = ({ story, parentEl }) => {
   parentEl.append(storyEl);
 };
 
+const togglePlayPause = ({ audioEl }) => {
+  if (audioEl.classList.contains("playing")) {
+    audioEl.pause();
+  } else {
+    audioEl.play();
+  }
+};
 const pauseCurrentAudio = () => {
   const prevAudioEl = document.querySelector(".playing");
   if (prevAudioEl) {
@@ -169,7 +187,15 @@ const renderNavLink = ({ parentEl, number, text, url, onClick, className }) => {
   const listEl = document.createElement("li");
   listEl.setAttribute("value", number);
   listEl.classList.add(className || "child");
+  listEl.setAttribute("tabindex", "0");
   listEl.addEventListener("click", onClick);
+  listEl.addEventListener("keydown", (event) => {
+    const { code } = event;
+    if (code === "Enter" || code === "Space") {
+      event.preventDefault();
+      onClick();
+    }
+  });
 
   const storyLink = document.createElement("a");
   storyLink.setAttribute("href", url);
@@ -260,6 +286,7 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
   storyEl.classList.add("focused");
   document.querySelector("footer").classList.remove("hidden");
 
+  storyEl.focus();
   scrollAndUpdateHistory({
     event,
     targetEl: storyEl,
@@ -278,6 +305,7 @@ const focusAbout = ({ event, noHistory }) => {
     targetEl: document.querySelector("header > img"),
     history: noHistory ? null : { url: "#welcome" },
   });
+  document.querySelector("header .start a").focus();
   setTitle();
 };
 

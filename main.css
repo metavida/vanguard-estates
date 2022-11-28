@@ -102,10 +102,11 @@ main {
 .story.hidden {
   visibility: hidden;
 }
-.story.focused {
+.story.focused, .story:focus {
   display: block;
   border: 3px solid #333;
   box-shadow: 0 0 3em 1em #fff;
+  outline: none;
 }
 .story h2 {
   margin: 0;
@@ -133,7 +134,7 @@ main {
   padding: 0.5em 2em;
   cursor: pointer;
 }
-.story .children li.child:hover, .story .children li.restart:hover {
+.story .children li.child:hover, .story .children li.child:focus, .story .children li.restart:hover, .story .children li.restart:focus {
   background: #eef;
 }
 
@@ -162,10 +163,10 @@ main {
 .story .children li.back span {
   display: none;
 }
-.story .children li.back:hover span {
+.story .children li.back:hover span, .story .children li.back:focus span {
   display: inline;
 }
-.story .children li.back:hover a::before {
+.story .children li.back:hover a::before, .story .children li.back:focus a::before {
   content: "back: ";
 }
 
