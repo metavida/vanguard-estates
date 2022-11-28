@@ -115,7 +115,19 @@ const renderStory = ({ story, parentEl }) => {
     );
     audioEl.addEventListener("pause", () => pauseCurrentAudio({ audioEl }));
 
-    // TODO: add text reader
+    const transcriptEl = storyEl.querySelector("details");
+    const transcriptIframe = transcriptEl.querySelector("iframe")
+    transcriptIframe.removeAttribute("srcdoc");
+    transcriptIframe.setAttribute("src", `transcripts/${story.id}.html`);
+    const transcriptToggleEl = transcriptEl.querySelector("summary");
+    transcriptToggleEl.addEventListener("click", () => toggleTranscript({ storyEl }));
+    transcriptToggleEl.addEventListener("keydown", (event) => {
+      const { code } = event;
+      if (code === "Enter" || code === "Space") {
+        event.preventDefault();
+        toggleTranscript({ storyEl });
+      }
+    });
 
     const childrenEl = storyEl.querySelector(".children");
     const childrenList = childrenEl.querySelector("ol");
@@ -190,6 +202,17 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   audioEl.classList.add("playing");
   if (!storyEl.classList.contains("focused")) {
     focusStory({ storyId, noPlay: true });
+  }
+};
+
+const toggleTranscript = ({ storyEl }) => {
+  const transcriptEl = storyEl.querySelector("details");
+  if(transcriptEl.open) {
+    storyEl.classList.remove("show-transcript");
+    transcriptEl.open = false;
+  } else {
+    storyEl.classList.add("show-transcript");
+    transcriptEl.open = true;
   }
 };
 

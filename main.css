@@ -100,6 +100,7 @@ main {
 .story {
   position: relative;
   width: var(--story-box-width);
+  max-height: 100vh;
   flex-shrink: 0;
   box-sizing: border-box;
   padding: 1em;
@@ -124,6 +125,10 @@ main {
   box-shadow: 0 0 3em 1em #fff;
   outline: none;
 }
+.story.show-transcript {
+  width: 90vw;
+}
+
 .story h2 {
   margin: 0;
 }
@@ -134,11 +139,33 @@ main {
   max-width: 200px;
   aspect-ratio: 1;
 }
+.story.show-transcript img {
+  max-width: 100px;
+}
 .story .player {
   width: 100%;
 }
-.story .player audio {
+.story.show-transcript .player {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}
+.story audio {
   width: 100%;
+}
+.story.show-transcript audio {
+  flex-grow: 1;
+}
+.story summary {
+  cursor: pointer;
+}
+.story iframe {
+  width: 100%;
+}
+/* Transcripts aren't (yet) styled to work well with the tree visualization */
+.tree .story details {
+  display: none;
 }
 
 .story .children ol {

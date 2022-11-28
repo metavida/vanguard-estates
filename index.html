@@ -70,10 +70,14 @@
 
     <template id="cell_template">
       <h2></h2>
-      <img />
       <div class="player">
+        <img />
         <audio controls preload="metadata" />
       </div>
+      <details>
+        <summary tabindex="0">Transcript</summary>
+        <iframe srcdoc="Loading..."></iframe>
+      </details>
       <nav class="children">
         <p>What do you do?</p>
         <ol></ol>
