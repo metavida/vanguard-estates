@@ -1,7 +1,12 @@
-// All data in this file comes from the FlashForward RSS feed:
-// https://feeds.megaphone.fm/PPY8359579005
-// To see the original visit:
-// https://www.flashforwardpod.com/2022/10/31/welcome-to-vanguard-estates/
+/*
+Copyright (C) 2022 Flash Forward (https://www.flashforwardpod.com)
+All Rights Reserved
+
+All data in this file originally comes from the FlashForward RSS feed:
+https://feeds.megaphone.fm/PPY8359579005
+To see the original visit:
+https://www.flashforwardpod.com/2022/10/31/welcome-to-vanguard-estates/
+*/
 
 export const storyLayers = [
   [{ id: "1", name: "Welcome to Vanguard Estates", children: [2, 3] }],

@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2022 Marcos Wright-Kuhns
+All Rights Reserved
+*/
 import { storyLayers, allStories } from "./story.js";
 
 let autoPlay;
