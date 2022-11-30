@@ -32,10 +32,16 @@ if ("content" in document.createElement("template")) {
 }
 
 const render = () => {
-  const getStartedLink = document.querySelector("header .start a");
+  const getStartedLink = document.querySelector("header .start > div");
   getStartedLink.addEventListener("click", (event) =>
     focusStory({ storyId: 1, event })
   );
+  getStartedLink.addEventListener("keydown", (event) => {
+    const { code } = event;
+    if (code === "Enter" || code === "Space") {
+      focusStory({ storyId: 1, event });
+    }
+  });
   const getAboutLink = document.querySelector("footer a");
   getAboutLink.addEventListener("click", (event) => focusAbout({ event }));
 
@@ -305,12 +311,12 @@ const focusStory = ({ storyId, event, noHistory, noPlay, pauseCurrent }) => {
 const focusAbout = ({ event, noHistory }) => {
   document.querySelector("footer").classList.add("hidden");
   event && event.stopPropagation();
+  document.querySelector("header .start > div").focus();
   scrollAndUpdateHistory({
     event,
     targetEl: document.querySelector("header > img"),
     history: noHistory ? null : { url: "#welcome" },
   });
-  document.querySelector("header .start a").focus();
   setTitle();
 };
 
