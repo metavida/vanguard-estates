@@ -2,11 +2,17 @@
 
 A mini-site that helps folks easily listent to the wonderful [Vanguards Estates choose your own path story](https://www.flashforwardpod.com/2022/10/31/welcome-to-vanguard-estates/) from [Flash Forward](https://www.flashforwardpod.com/).
 
-This is an un-official fan project that I'm making in hopes that even more people will get to enjoy the story!
+## Start listening
+
+https://www.flashforwardpod.com/vanguard-interactive/
+
+[![Welcome to Vanguard Estates logo](https://www.flashforwardpod.com/wp-content/uploads/2022/10/HEADER.jpg)](https://www.flashforwardpod.com/vanguard-interactive/)
+
+This is an un-official fan project that I made in hopes that even more people will get to enjoy the story! Fortunately Rose liked it too, so now it's hosted on the official Flash Forward website!
 
 ## Story structure
 
-Here's a visualization of the paths available in the story
+A visualization of the paths available in the story
 
 ```mermaid
 graph LR
