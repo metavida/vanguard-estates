@@ -23,24 +23,27 @@ header {
   width: 100vw;
   max-width: 60em;
   box-sizing: border-box;
+  margin: 0 auto;
+  padding-top: max(1em, env(safe-area-inset-top));
+  padding-right: max(1em, env(safe-area-inset-right));
+  padding-bottom: max(1em, env(safe-area-inset-bottom));
+  padding-left: max(1em, env(safe-area-inset-left));
 }
 .tree header {
   position: absolute;
   top: 0;
   left: 0;
+  margin: 0;
 }
 header img {
   display: block;
-  width: calc(100% - 2em);
+  width: 100%;
   aspect-ratio: 2;
-  padding: 1em 1em 0;
+  padding: 0;
 }
 header div {
-  margin: 0 1em;
-  padding-top: max(1em, env(safe-area-inset-top));
-  padding-right: max(1em, env(safe-area-inset-right));
-  padding-bottom: max(1em, env(safe-area-inset-bottom));
-  padding-left: max(1em, env(safe-area-inset-left));
+  margin: 0;
+  padding: 1em;
   background-color: #fff;
   border-radius: 0 0 1em 1em;
 }
