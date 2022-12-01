@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-12-01
+
+### Added
+
+- Added transcripts for all stories!
+
+### Fixed
+
+- Fixed bug where manually scrolling in Firefox for iOS (and perhaps other mobile browser) didn't work well because the expanding & contracting address bar changed the height of each story, causing stories to jump around.
 ## 2022-11-30
 
 ### Changed
