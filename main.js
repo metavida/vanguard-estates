@@ -97,25 +97,40 @@ const renderStory = ({ story, parentEl }) => {
   storyEl.setAttribute("tabindex", "-1");
 
   if (story.id) {
-    const { id, name, children, parent } = story;
-    storyEl.setAttribute("id", `story-${id}`);
+    const { id: storyId, name, children, parent } = story;
+    storyEl.setAttribute("id", `story-${storyId}`);
 
     const cellTemp = document.getElementById("cell_template");
     storyEl.append(cellTemp.content.cloneNode(true));
 
-    storyEl.querySelector("h2").textContent = `${id}. ${name}`;
+    storyEl.querySelector("h2").textContent = `${storyId}. ${name}`;
     const imgEl = storyEl.querySelector("img");
-    imgEl.setAttribute("src", `https://megaphone.imgix.net/podcasts/${story.image.megaphone}?max-w=300&max-h=300&fit=crop&auto=format,compress`);
+    imgEl.setAttribute(
+      "src",
+      `https://megaphone.imgix.net/podcasts/${story.image.megaphone}?max-w=300&max-h=300&fit=crop&auto=format,compress`
+    );
     imgEl.setAttribute("alt", story.image.alt);
 
     const audioEl = storyEl.querySelector(".player audio");
     audioEl.setAttribute("src", story.audio.url);
     audioEl.addEventListener("play", () =>
-      handlePlayStart({ audioEl, storyEl, storyId: id })
+      handlePlayStart({ audioEl, storyEl, storyId })
     );
     audioEl.addEventListener("pause", () => pauseCurrentAudio({ audioEl }));
 
-    // TODO: add text reader
+    const transcriptEl = storyEl.querySelector("details");
+    loadTranscript({ storyEl, storyId });
+    const transcriptToggleEl = transcriptEl.querySelector("summary");
+    transcriptToggleEl.addEventListener("click", (event) => {
+      toggleTranscript({ storyEl });
+    });
+    transcriptToggleEl.addEventListener("keydown", (event) => {
+      const { code } = event;
+      if (code === "Enter" || code === "Space") {
+        event.preventDefault();
+        toggleTranscript({ storyEl });
+      }
+    });
 
     const childrenEl = storyEl.querySelector(".children");
     const childrenList = childrenEl.querySelector("ol");
@@ -152,9 +167,14 @@ const renderStory = ({ story, parentEl }) => {
       });
     }
 
-    storyEl.addEventListener("click", (event) =>
-      focusStory({ storyId: id, event })
-    );
+    storyEl.addEventListener("click", (event) => {
+      focusStory({
+        storyId,
+        event,
+        // Don't try to auto-play if we clicked inside the transcript area.
+        noPlay: event.composedPath().includes(transcriptEl),
+      });
+    });
     storyEl.addEventListener("keydown", (event) => {
       const { target, code } = event;
       if (target === storyEl) {
@@ -190,6 +210,39 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   audioEl.classList.add("playing");
   if (!storyEl.classList.contains("focused")) {
     focusStory({ storyId, noPlay: true });
+  }
+};
+
+const toggleTranscript = ({ storyEl }) => {
+  const transcriptEl = storyEl.querySelector("details");
+  if (transcriptEl.open) {
+    storyEl.classList.remove("show-transcript");
+    transcriptEl.open = false;
+  } else {
+    storyEl.classList.add("show-transcript");
+    transcriptEl.open = true;
+  }
+};
+
+const loadTranscript = async ({ storyEl, storyId }) => {
+  const transcriptHolderEl = storyEl.querySelector(".transcript");
+  if (transcriptHolderEl.dataset.fetched === "false") {
+    transcriptHolderEl.dataset.fetched = "true";
+    const transcriptText = await fetchTranscript({ storyId });
+    transcriptHolderEl.innerHTML = transcriptText;
+  }
+};
+
+const fetchTranscript = async ({ storyId }) => {
+  try {
+    const resp = await fetch(`./transcripts/${storyId}.html`);
+    if (!resp.ok) {
+      throw "Failed to fetch story";
+    }
+    const body = await resp.text();
+    return body;
+  } catch (err) {
+    return `Failed to load transcript for Story ${storyId}.`;
   }
 };
 

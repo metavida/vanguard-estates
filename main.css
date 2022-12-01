@@ -99,6 +99,8 @@ main {
 
 .story {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: var(--story-box-width);
   flex-shrink: 0;
   box-sizing: border-box;
@@ -108,22 +110,31 @@ main {
   background: #fff;
   font-size: 1.25em;
 }
-.vertical .story {
-  margin: calc(100vh / 2) auto;
+.vertical .story, .single .story {
+  /*
+  Picking a fairly very tall minimum in hopes that on mobile devices
+  we always use the static "em" height, because `vh` is variable
+  which can really screw up the scroll position w/ dynamic height.
+  */
+  margin: max(60em, calc(100vh / 2)) auto;
 }
 .single .story {
   display: none;
-  margin: calc(100vh / 2) auto;
 }
 .story.hidden {
   visibility: hidden;
 }
 .story.focused, .story:focus {
-  display: block;
+  display: flex;
   border: 3px solid #333;
   box-shadow: 0 0 3em 1em #fff;
   outline: none;
 }
+.story.show-transcript {
+  width: 90vw;
+  min-height: 90vh;
+}
+
 .story h2 {
   margin: 0;
 }
@@ -134,11 +145,43 @@ main {
   max-width: 200px;
   aspect-ratio: 1;
 }
+.story.show-transcript img {
+  max-width: 100px;
+}
 .story .player {
   width: 100%;
 }
-.story .player audio {
+.story.show-transcript .player {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}
+.story audio {
   width: 100%;
+}
+.story.show-transcript audio {
+  flex-grow: 1;
+}
+.story details {
+  flex-grow: 1;
+}
+.story summary {
+  cursor: pointer;
+}
+.story .transcript {
+  width: 100%;
+  height: 40vh;
+  min-height: 6em;
+  box-sizing: border-box;
+  overflow: auto;
+  border: 2px inset;
+  padding: 0 1em;
+  font-size: 0.8em;
+}
+/* Transcripts aren't (yet) styled to work well with the tree visualization */
+.tree .story details {
+  display: none;
 }
 
 .story .children ol {
