@@ -110,12 +110,16 @@ main {
   background: #fff;
   font-size: 1.25em;
 }
-.vertical .story {
-  margin: calc(100vh / 2) auto;
+.vertical .story, .single .story {
+  /*
+  Picking a fairly very tall minimum in hopes that on mobile devices
+  we always use the static "em" height, because `vh` is variable
+  which can really screw up the scroll position w/ dynamic height.
+  */
+  margin: max(60em, calc(100vh / 2)) auto;
 }
 .single .story {
   display: none;
-  margin: calc(100vh / 2) auto;
 }
 .story.hidden {
   visibility: hidden;
