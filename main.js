@@ -120,16 +120,15 @@ const renderStory = ({ story, parentEl }) => {
 
     const transcriptEl = storyEl.querySelector("details");
     loadTranscript({ storyEl, storyId });
-    console.log({ where: "after load", storyId });
     const transcriptToggleEl = transcriptEl.querySelector("summary");
-    transcriptToggleEl.addEventListener("click", () =>
-      toggleTranscript({ storyEl, storyId })
-    );
+    transcriptToggleEl.addEventListener("click", (event) => {
+      toggleTranscript({ storyEl });
+    });
     transcriptToggleEl.addEventListener("keydown", (event) => {
       const { code } = event;
       if (code === "Enter" || code === "Space") {
         event.preventDefault();
-        toggleTranscript({ storyEl, storyId });
+        toggleTranscript({ storyEl });
       }
     });
 
@@ -168,9 +167,14 @@ const renderStory = ({ story, parentEl }) => {
       });
     }
 
-    storyEl.addEventListener("click", (event) =>
-      focusStory({ storyId, event })
-    );
+    storyEl.addEventListener("click", (event) => {
+      focusStory({
+        storyId,
+        event,
+        // Don't try to auto-play if we clicked inside the transcript area.
+        noPlay: event.composedPath().includes(transcriptEl),
+      });
+    });
     storyEl.addEventListener("keydown", (event) => {
       const { target, code } = event;
       if (target === storyEl) {
@@ -209,7 +213,7 @@ const handlePlayStart = ({ audioEl, storyEl, storyId }) => {
   }
 };
 
-const toggleTranscript = async ({ storyEl, storyId }) => {
+const toggleTranscript = ({ storyEl }) => {
   const transcriptEl = storyEl.querySelector("details");
   if (transcriptEl.open) {
     storyEl.classList.remove("show-transcript");
@@ -226,12 +230,10 @@ const loadTranscript = async ({ storyEl, storyId }) => {
     transcriptHolderEl.dataset.fetched = "true";
     const transcriptText = await fetchTranscript({ storyId });
     transcriptHolderEl.innerHTML = transcriptText;
-    console.log({ where: "done loading", storyId });
   }
 };
 
 const fetchTranscript = async ({ storyId }) => {
-  console.log({ where: "fetchTranscript", storyId });
   try {
     const resp = await fetch(`./transcripts/${storyId}.html`);
     if (!resp.ok) {
