@@ -130,7 +130,7 @@ main {
   box-shadow: 0 0 3em 1em #fff;
   outline: none;
 }
-.story.show-transcript {
+.story.focused.show-transcript {
   width: 90vw;
   min-height: 90vh;
 }
@@ -145,13 +145,13 @@ main {
   max-width: 200px;
   aspect-ratio: 1;
 }
-.story.show-transcript img {
+.story.focused.show-transcript img {
   max-width: 100px;
 }
 .story .player {
   width: 100%;
 }
-.story.show-transcript .player {
+.story.focused.show-transcript .player {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -160,16 +160,21 @@ main {
 .story audio {
   width: 100%;
 }
-.story.show-transcript audio {
+.story.focused.show-transcript audio {
   flex-grow: 1;
 }
 .story details {
   flex-grow: 1;
 }
+/* Transcripts aren't (yet) styled to work well with the tree visualization */
+.tree .story details {
+  display: none;
+}
 .story summary {
   cursor: pointer;
 }
 .story .transcript {
+  display: none; /* Only show the transcript if the story is focused */
   width: 100%;
   height: 40vh;
   min-height: 6em;
@@ -179,9 +184,8 @@ main {
   padding: 0 1em;
   font-size: 0.8em;
 }
-/* Transcripts aren't (yet) styled to work well with the tree visualization */
-.tree .story details {
-  display: none;
+.story.focused .transcript {
+  display: block;
 }
 
 .story .children ol {
