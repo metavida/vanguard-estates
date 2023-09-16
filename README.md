@@ -4,11 +4,11 @@ A mini-site that helps folks easily listent to the wonderful [Vanguards Estates 
 
 ## Start listening
 
-https://www.flashforwardpod.com/vanguard-interactive/
+https://vanguard-estates.wrightkuhns.com
 
-[![Welcome to Vanguard Estates logo](https://www.flashforwardpod.com/wp-content/uploads/2022/10/HEADER.jpg)](https://www.flashforwardpod.com/vanguard-interactive/)
+[![Welcome to Vanguard Estates logo](header.jpg)](https://vanguard-estates.wrightkuhns.com)
 
-This is an un-official fan project that I made in hopes that even more people will get to enjoy the story! Fortunately Rose liked it too, so now it's hosted on the official Flash Forward website!
+This is an un-official fan project that I made in hopes that even more people will get to enjoy the story! Fortunately Rose liked it too, so now it's also hosted [on the official Flash Forward website, too!](https://www.flashforwardpod.com/vanguard-interactive/)
 
 ## Story structure
 
